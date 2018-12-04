@@ -42,14 +42,21 @@ public class HelloWorldServer {
     }
 
     private SslContextBuilder getSslContextBuilder() {
-        String certChainFilePath = "sslcert/server.crt";
-        String privateKeyFilePath = "sslcert/server.pem";
-        String trustCertCollectionFilePath = "sslcert/ca.crt";
+        String filepath = System.getProperty("user.dir") + "/";
+        String certChainFilePath = filepath + "sslcert/server.crt";
+        String privateKeyFilePath = filepath + "sslcert/server.pem";
+        String trustCertCollectionFilePath = filepath + "sslcert/ca.crt";
 
-        ClassLoader classLoader = HelloWorldServer.class.getClassLoader();
+        /*ClassLoader classLoader = HelloWorldServer.class.getClassLoader();
+        File keyCertChainFile=new File(classLoader.getResource(certChainFilePath).getFile());
+        File keyFile= new File(classLoader.getResource(privateKeyFilePath).getFile());
+        File trustCertCollectionFile=new File(classLoader.getResource(trustCertCollectionFilePath).getFile());*/
+        File keyCertChainFile=new File(certChainFilePath);
+        File keyFile= new File(privateKeyFilePath);
+        File trustCertCollectionFile=new File(trustCertCollectionFilePath);
 
-        SslContextBuilder sslClientContextBuilder = SslContextBuilder.forServer(new File(classLoader.getResource(certChainFilePath).getFile()), new File(classLoader.getResource(privateKeyFilePath).getFile()));
-        sslClientContextBuilder.trustManager(new File(classLoader.getResource(trustCertCollectionFilePath).getFile()));
+        SslContextBuilder sslClientContextBuilder = SslContextBuilder.forServer(keyCertChainFile,keyFile);
+        sslClientContextBuilder.trustManager(trustCertCollectionFile);
         sslClientContextBuilder.clientAuth(ClientAuth.REQUIRE);
 
         return GrpcSslContexts.configure(sslClientContextBuilder,

@@ -16,7 +16,7 @@
 
 2. 生成 CA 证书
 
-    `openssl req -passin pass:1111 -new -x509 -days 365 -key ca.key -out ca.crt -subj "/CN=${SERVER_CN}"`
+    `openssl req -passin pass:1111 -new -x509 -days 365 -key ca.key -out ca.crt -subj "/CN=localhost"`
 
 3. 生成服务端私钥
 
@@ -24,7 +24,7 @@
 
 4. 生成服务端CSR
 
-    `openssl req -passin pass:2222 -new -key server.key -out server.csr -subj "/CN=${SERVER_CN}"`
+    `openssl req -passin pass:2222 -new -key server.key -out server.csr -subj "/CN=localhost"`
 
 5. 生成服务端自签名证书
 
@@ -40,7 +40,7 @@
 
 8. 生成客户端CSR
 
-    `openssl req -passin pass:3333 -new -key client.key -out client.csr -subj "/CN=${CLIENT_CN}"`
+    `openssl req -passin pass:3333 -new -key client.key -out client.csr -subj "/CN=localhost"`
 
 9. 生成客户端自签名证书
 

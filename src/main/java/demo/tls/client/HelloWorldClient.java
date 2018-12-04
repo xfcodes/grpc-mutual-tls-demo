@@ -31,15 +31,21 @@ public class HelloWorldClient {
     private final GreeterGrpc.GreeterBlockingStub blockingStub;
 
     private static SslContext buildSslContext() throws SSLException {
-        String clientCertChainFilePath = "sslcert/client.crt";
-        String clientPrivateKeyFilePath = "sslcert/client.pem";
-        String trustCertCollectionFilePath = "sslcert/ca.crt";
+        String filepath = System.getProperty("user.dir") + "/";
+        String clientCertChainFilePath = filepath +"sslcert/client.crt";
+        String clientPrivateKeyFilePath = filepath +"sslcert/client.pem";
+        String trustCertCollectionFilePath =filepath + "sslcert/ca.crt";
 
-        ClassLoader classLoader = HelloWorldClient.class.getClassLoader();
+//        ClassLoader classLoader = HelloWorldClient.class.getClassLoader();
+        File keyCertChainFile=new File(clientCertChainFilePath);
+        File keyFile= new File(clientPrivateKeyFilePath);
+        File trustCertCollectionFile=new File(trustCertCollectionFilePath);
 
         SslContextBuilder builder = GrpcSslContexts.forClient();
-        builder.keyManager(new File(classLoader.getResource(clientCertChainFilePath).getFile()), new File(classLoader.getResource(clientPrivateKeyFilePath).getFile()));
-        builder.trustManager(new File(classLoader.getResource(trustCertCollectionFilePath).getFile()));
+     /*   builder.keyManager(new File(classLoader.getResource(clientCertChainFilePath).getFile()), new File(classLoader.getResource(clientPrivateKeyFilePath).getFile()));
+        builder.trustManager(new File(classLoader.getResource(trustCertCollectionFilePath).getFile())); */
+        builder.keyManager(keyCertChainFile,keyFile);
+        builder.trustManager(trustCertCollectionFile);
 
         return builder.build();
     }
